@@ -1,5 +1,8 @@
-flask
-flasgger
-flask_restful
-pyairtable
+Flask
+Flask-RESTful
+Flasgger
 gunicorn
+firebase-admin
+werkzeug
+python-dotenv
+flask-cors
