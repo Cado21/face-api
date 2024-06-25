@@ -39,3 +39,13 @@ To install the package please run this:
  - **Reactivating** the virtual environment: To activate the virtual environment again in the future, navigate to your project directory and run the activation command again.
 
  - **Virtual environment directory**: It's a good practice to include the virtual environment directory (myenv in this example) in your .gitignore file if you are using version control to avoid committing it to your repository.
+
+
+ # Environtment Variables:
+
+1. Please create .env file in root folder
+2. replace [variable] with your string, like this:
+```
+GOOGLE_APPLICATION_CREDENTIALS=secrets/[your-service-account].json
+FIREBASE_STORAGE_BUCKET=[firebase-storage-bucketname]
+```
