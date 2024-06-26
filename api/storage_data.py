@@ -14,15 +14,18 @@ class StorageData(Resource):
                     'type': 'object',
                     'properties': {
                         'data': {
-                            'type': 'array',
-                            'items': {
-                                'type': 'object',
-                                'properties': {
-                                    'name': {'type': 'string'},
-                                    'size': {'type': 'integer'},
-                                    'content_type': {'type': 'string'},
-                                    'updated': {'type': 'string', 'format': 'date-time'},
-                                    'created': {'type': 'string', 'format': 'date-time'}
+                            'type': 'object',
+                            'additionalProperties': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    'properties': {
+                                        'name': {'type': 'string'},
+                                        'size': {'type': 'integer'},
+                                        'content_type': {'type': 'string'},
+                                        'updated': {'type': 'string', 'format': 'date-time'},
+                                        'created': {'type': 'string', 'format': 'date-time'}
+                                    }
                                 }
                             }
                         }
@@ -37,19 +40,22 @@ class StorageData(Resource):
     def get(self):
         try:
             bucket = storage.bucket()
-            blobs = list(bucket.list_blobs())
-
-            data = []
+            blobs = bucket.list_blobs(prefix='dataset/')
+            data = {}
             for blob in blobs:
-                data.append({
-                    'name': blob.name,
-                    'size': blob.size,
-                    'content_type': blob.content_type,
-                    'updated': blob.updated,
-                    'created': blob.time_created
-                })
-
-            return jsonify({'data': data}), 200
+                print(f"Blob: {blob.name}, Size: {blob.size}")
+                label = blob.name.split('/')[2]
+                if label not in data:
+                    data[label] = []
+                    data[label].append({
+                        'name': blob.name.split('/')[-1],
+                        'size': blob.size,
+                        'content_type': blob.content_type,
+                        'updated': blob.updated.strftime('%Y-%m-%d %H:%M:%S'), 
+                        'created': blob.time_created.strftime('%Y-%m-%d %H:%M:%S')
+                    })
+            
+            return {'data': data}, 200
 
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
+            return {'error': str(e)}, 500

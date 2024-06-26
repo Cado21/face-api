@@ -6,3 +6,8 @@ firebase-admin
 werkzeug
 python-dotenv
 flask-cors
+tensorflow==2.16.1
+mtcnn
+opencv-python
+numpy
+scikit-learn

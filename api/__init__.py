@@ -2,7 +2,6 @@ from flask import Flask, Blueprint
 from flask_restful import Api
 from flasgger import Swagger
 from api.add_dataset import AddDataset
-from api.train import Train
 from api.ping import Ping
 from api.storage_data import StorageData
 
@@ -14,7 +13,6 @@ def create_app():
 
     api.add_resource(Ping, '/ping')
     api.add_resource(AddDataset, '/add-dataset')
-    api.add_resource(Train, '/train')
     api.add_resource(StorageData, '/storage-data')
 
     template = {

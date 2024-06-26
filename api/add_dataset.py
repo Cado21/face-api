@@ -3,6 +3,7 @@ from flask_restful import Resource
 from flasgger import swag_from
 from werkzeug.utils import secure_filename
 from firebase_admin import storage
+import time
 
 class AddDataset(Resource):
 
@@ -49,12 +50,12 @@ class AddDataset(Resource):
             if not images:
                 return jsonify({'message': 'No images provided'}), 400
 
-            # Folder path in Firebase Storage
-            folder_path = f"dataset/{label}/"
+            new_dataset_folder_path = f"dataset/{label}/"
 
             for image in images:
                 filename = secure_filename(image.filename)
-                blob = storage.bucket().blob(f"{folder_path}{filename}")
+                uniqueId = int(time.time() * 1000)
+                blob = storage.bucket().blob(f"{new_dataset_folder_path}{uniqueId}_{filename}")
                 blob.upload_from_string(image.read(), content_type=image.content_type)
 
             return {'label': label}, 200

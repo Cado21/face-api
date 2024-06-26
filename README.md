@@ -30,6 +30,13 @@ To install the package please run this:
 
 ```python3 -m pip install -r requirements.txt```
 
+
+## Step 4: Run the app
+
+To run the app, please run this command:
+
+```python3 app.py```
+
 ## Additional Notes
 
  - **Deactivating the virtual environment**: When you are done working in the virtual environment, you can deactivate it by running:
