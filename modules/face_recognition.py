@@ -6,7 +6,7 @@ from tensorflow.keras.utils import to_categorical
 from mtcnn.mtcnn import MTCNN
 from tensorflow.keras.applications.inception_resnet_v2 import InceptionResNetV2, preprocess_input
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Flatten, Dense
+from tensorflow.keras.layers import Layer, Flatten, Dense
 from firebase_admin import storage
 import tensorflow as tf
 
@@ -26,6 +26,40 @@ def extract_face(image_data, required_size=(160, 160)):
         return face
     return None
 
+# class CustomScaleLayer(Layer):
+#     def __init__(self, scale_factor=None, **kwargs):
+#         self.scale_factor = scale_factor
+#         super(CustomScaleLayer, self).__init__(**kwargs)
+    
+#     def build(self, input_shape):
+#         super(CustomScaleLayer, self).build(input_shape)
+    
+#     def call(self, inputs, **kwargs):
+#         if not isinstance(inputs, list):
+#             inputs = [inputs]  # Ensure inputs is a list of tensors
+        
+#         scaled_inputs = [input_tensor * self.scale_factor for input_tensor in inputs]
+#         if len(scaled_inputs) == 1:
+#             return scaled_inputs[0]
+#         else:
+#             return scaled_inputs
+
+#     def compute_output_shape(self, input_shape):
+#         if isinstance(input_shape, list):
+#             return [input_shape[0]]  # Return the same shape for each input tensor
+#         else:
+#             return input_shape
+
+#     def get_config(self):
+#         config = super(CustomScaleLayer, self).get_config()
+#         config.update({'scale_factor': self.scale_factor})
+#         return config
+
+#     @classmethod
+#     def from_config(cls, config):
+#         scale_factor = config.pop('scale_factor', None)  # Remove scale_factor from config
+#         return cls(scale_factor=scale_factor, **config) 
+    
 def initialize_model(num_classes):
     base_model = InceptionResNetV2(include_top=False, input_shape=(160, 160, 3), pooling='avg')
     x = Flatten()(base_model.output)
@@ -85,7 +119,6 @@ def retrain_model(model, model_path, bucket, prefixes, label_map):
 
     model.save(model_path)
     return model
-
 
 @tf.function
 def predict_face(face, model):
