@@ -11,3 +11,4 @@ mtcnn
 opencv-python
 numpy
 scikit-learn
+Pillow

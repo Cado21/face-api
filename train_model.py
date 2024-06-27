@@ -3,8 +3,13 @@ from tensorflow.keras.models import load_model
 from firebase_admin import storage
 from modules.face_recognition import initialize_model, create_label_map, retrain_model
 from firebase_setup import initialize_firebase
+from modules.custom_layers import CustomScaleLayer
 import os
 import tensorflow as tf
+from tensorflow.keras.utils import get_custom_objects
+
+# Register the custom layer
+get_custom_objects().update({'CustomScaleLayer': CustomScaleLayer})
 
 # Global variables
 labels_to_train = ["Ricardo", "Coda", "Dado"]
@@ -31,7 +36,7 @@ def train_model(labels, model_name, dataset_path):
         model_blob.download_to_filename(local_model_path)
         print(f'Loading model: {local_model_path}')
         try:
-            model = tf.keras.models.load_model(local_model_path)
+            model = tf.keras.models.load_model(local_model_path, custom_objects={'CustomScaleLayer': CustomScaleLayer})
         except Exception as e:
             print(f"Error loading model from {local_model_path}: {e}")
             model = initialize_model(len(label_map))

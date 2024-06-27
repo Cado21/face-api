@@ -4,6 +4,8 @@ from flasgger import Swagger
 from api.add_dataset import AddDataset
 from api.ping import Ping
 from api.storage_data import StorageData
+from api.recognize_face import RecognizeFace
+
 
 def create_app():
     app = Flask(__name__)
@@ -14,6 +16,7 @@ def create_app():
     api.add_resource(Ping, '/ping')
     api.add_resource(AddDataset, '/add-dataset')
     api.add_resource(StorageData, '/storage-data')
+    api.add_resource(RecognizeFace, '/recognize')
 
     template = {
         "swagger": "2.0",
